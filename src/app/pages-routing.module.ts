@@ -3,19 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { ListadoDeHeroesComponent } from './listado-de-heroes/listado-de-heroes.component';
 import { HeroProfileComponent } from './hero-profile/hero-profile.component';
 import { ModalPollComponent } from './modal-poll/modal-poll.component';
-import { PageRoutingModule} from './pages-routing.module'
 
 const routes: Routes = [
-  { 
-    path: '', 
-   
-    loadChildren: () => import('./pages-routing.module').then( m => m.PageRoutingModule )
-}
+  { path: 'listado-heroes', component: ListadoDeHeroesComponent},
+  { path: 'heroe/:id', component: HeroProfileComponent},
+  { path: 'modal-poll', component: ModalPollComponent},
+  { path: '**', redirectTo: '/listado-heroes'}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
-
+export class PageRoutingModule { }
