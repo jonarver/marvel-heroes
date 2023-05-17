@@ -12,7 +12,7 @@
     </a>
   </div>
   <div class="paginator col-xs-12">
-    <a class="paginator-prev" (click)="prevPage()" *ngIf="page > 0">Prev</a>
+    <a class="paginator-prev" (click)="prevPage()" *ngIf="page > 1">Prev</a>
     Página {{page}} de {{totalPages}}
     <a class="paginator-next" (click)="nextPage()" *ngIf="page < totalPages ">Next</a>
   </div>

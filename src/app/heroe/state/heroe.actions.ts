@@ -1,6 +1,12 @@
+import { Heroe } from './heroe.model';
+
 export class GetHeroe {
   static readonly type = '[Heroe] Get Heroes';
   constructor(public payload: { nameStartsWith?: string, page: number, limit:number }) { }
+}
+export class SetHeroeProfile {
+  static readonly type = '[Heroe] Set Heroe';
+  constructor(public payload: { data: Heroe }) { }
 }
 export class PostTeamColorHero {
   static readonly type = '[Heroe] Post Team Color Heroe';

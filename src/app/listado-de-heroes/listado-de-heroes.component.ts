@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { listHeroes, Heroe } from '../heroe/state/heroe.model'
-import { GetHeroe } from '../heroe/state/heroe.actions'
+import { GetHeroe, SetHeroeProfile } from '../heroe/state/heroe.actions'
 import { HeroeState } from '../heroe/state/heroe.state';
 
 @Component({
@@ -18,11 +18,11 @@ export class ListadoDeHeroesComponent implements OnInit {
   public title = 'Tutorial de Angular - Héroes de Marvel';
   public searchString;
   public heroes : Heroe[] ;
-  public page = 1;
+  public page = 0;
   public total = 0;
   public offset = 10;
   public beforePage = 0;
-  public limit= 0;
+  public limit= 10;
   public count= 0;
   public nextPageH = 0;
   public totalPages = 0
@@ -39,30 +39,18 @@ export class ListadoDeHeroesComponent implements OnInit {
               private router:Router,
               private store: Store ) { }
   async ngOnInit() {
-   
-    /*const her = await this.heroesService.cargarUsuarios().subscribe((data) => {
-      console.log("her---",data);
-    this.heroes = data.heroes
-
-    })*/
-
-    // this.heroes = this.heroesService.heroes
-    // this.page=this.heroesService.page
-    // this.total=this.heroesService.total
-
     
-    this.filter(0, 10)
-    this.fetchHeroe()
+    await this.fetchHeroe()    
+    this.filter(this.page>0?this.page-1:this.page, this.limit,this.searchString)
+
   }
  
-  submitSearch() {
-    console.log("filter");
-    
+  submitSearch() {    
     this.filter(0, this.limit, this.searchString);
   }
 
   prevPage() {
-    this.filter( this.beforePage, this.offset,this.searchString );
+    this.filter( this.beforePage, this.limit,this.searchString );
   }
 
   nextPage() {
@@ -72,11 +60,10 @@ export class ListadoDeHeroesComponent implements OnInit {
 
   go_to(data){
      // Guardo los datos del heroe en local localStorage
-     console.log("data",data);
      
-     localStorage.setItem('heroe',JSON.stringify(data));
-
-    this.router.navigateByUrl('/heroe/'+data.id);
+     //localStorage.setItem('heroe',JSON.stringify(data));
+     this.store.dispatch(new SetHeroeProfile({ data }));
+     this.router.navigateByUrl('/heroe/'+data.id);
   }
   /*get_heroes(){
     this.heroesService.getHeroes();
@@ -90,23 +77,24 @@ export class ListadoDeHeroesComponent implements OnInit {
 
   fetchHeroe(){
     // Nos subscribimos para estar pendiente de los cambios de la propiedad
-    this.heroe$.subscribe({
-      next: (data) => {
+    this.heroe$.subscribe(
+      (data) => {
         
         // Obtenemos el array de heroes
-        const {heroes, nextPage, page, beforePage, limit, total, count, offset, totalPages } = data
+        const {heroes, nextPage, page, beforePage, limit, total, count, offset, totalPages, nameStartsWith } = data
         this.heroes  = heroes
         this.nextPageH=nextPage,
-         this.page=page,
-         this.beforePage=beforePage,
-         this.limit=limit,
-         this.total=total,
-         this.count=count,
-         this.offset=offset
-         this.totalPages= totalPages 
-        
+        this.page=page,
+        this.beforePage=beforePage,
+        this.limit=limit,
+        this.total=total,
+        this.count=count,
+        this.offset=offset
+        this.totalPages= totalPages
+        this.searchString = nameStartsWith 
       }
-    })
+    )
+    
   }
 
 }

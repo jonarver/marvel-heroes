@@ -22,6 +22,8 @@ export interface HeroesStateModel {
    page:number
    total:number
    totalPages:number
+   nameStartsWith:string
+   heroe:Heroe
   }
 
   export interface HeroeTeamColor {

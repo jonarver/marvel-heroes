@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
-import { Heroe } from '../classes/heroe';
+import { listHeroes, Heroe } from '../heroe/state/heroe.model'
 import { HeroesService } from '../heroes.service';
 
 import { Location } from '@angular/common';
@@ -21,7 +21,7 @@ export class HeroProfileComponent implements OnInit {
 
     // Selector asociado a la propiedad people del estado
     @Select(HeroeState.heroe)
-    heroe$: Observable<Heroe>;
+    heroe$: Observable<listHeroes>;
 
   @ViewChild('modal') modal;
   private assignedTeam:boolean;
@@ -38,12 +38,12 @@ export class HeroProfileComponent implements OnInit {
               private _location: Location,
               private store: Store ) { }
 
-  ngOnInit() {
-    this.heroe = JSON.parse(localStorage.getItem('heroe'))
-    this.assignedTeam = this.heroe.teamColor!=''?true:false
-    console.log("assignedTeam",this.assignedTeam);
+  async ngOnInit() {
+    //this.heroe = JSON.parse(localStorage.getItem('heroe'))
+   
     
-    this.fetchHeroe()
+    await this.fetchHeroe()
+    this.assignedTeam = this.heroe.teamColor!=''?true:false
     
   }
 
@@ -52,15 +52,12 @@ export class HeroProfileComponent implements OnInit {
   }
 
   getTeam(team):void{
-    console.log("Color: "+this.group_colors[team]);
     this.team = team;
     
     if (!this.assignedTeam) {
-      console.log("post");
       
       this.store.dispatch(new PostTeamColorHero({id_heroe:this.heroe.id, color:this.group_colors[team] }));
     }else{
-      console.log("put");
       this.store.dispatch(new PutTeamColorHero({id_heroe:this.heroe.id, color:this.group_colors[team] }));
     }
   }
@@ -73,15 +70,16 @@ export class HeroProfileComponent implements OnInit {
 
   fetchHeroe(){
     // Nos subscribimos para estar pendiente de los cambios de la propiedad
-    this.heroe$.subscribe({
-      next: (data) => {
+    this.heroe$.subscribe(
+       (data) => {
         
         // Obtenemos el team color del heroes
-        console.log("fetchHeroe",data);
+        const { heroe } = data
         
+        this.heroe = heroe
         
       }
-    })
+    )
   }
 
 }

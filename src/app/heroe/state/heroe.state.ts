@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetHeroe,PostTeamColorHero,PutTeamColorHero } from './heroe.actions';
+import { GetHeroe,PostTeamColorHero,PutTeamColorHero,SetHeroeProfile } from './heroe.actions';
 import { Heroe, HeroeTeamColor } from './heroe.model';
 import { HeroesService } from '../../heroes.service'
 import { tap } from 'rxjs/operators';
+import { state } from '@angular/animations';
 
 export class HeroeStateModel {
   public nextPage:number;
@@ -16,19 +17,23 @@ export class HeroeStateModel {
   public totalPages:number;
   public heroes: Heroe[];
   public heroeTeamColor: {HeroeTeamColor:{}};
+  public nameStartsWith: string;
+  public heroe: {};
 }
 
 const defaults = {
   nextPage:0,
   page: 0,
   beforePage: 0,
-  limit:0,
+  limit:10,
   total:0,
   count:0,
   offset:0,
   totalPages:0,
   heroeTeamColor: {HeroeTeamColor:{}},
-  heroes: []
+  heroes: [],
+  nameStartsWith:'',
+  heroe:{}
 };
 
 @State<HeroeStateModel>({
@@ -48,40 +53,37 @@ export class HeroeState {
    constructor(private heroeService: HeroesService) { }
 
   @Action(GetHeroe)
-  getPeople({ patchState }: StateContext<HeroeStateModel>, { payload }: GetHeroe) {
-   console.log("pay",payload);   
-    return this.heroeService.getHeroes(payload.page, payload.limit, payload.nameStartsWith).pipe(
+  getPeople({ patchState }: StateContext<HeroeStateModel>, { payload }: GetHeroe) { 
+   const nameStartsWith = payload.nameStartsWith
+    return this.heroeService.getHeroes(payload.page, payload.limit, payload.nameStartsWith ).pipe(
       tap((resp) => {
-        console.log("-----",resp);
         const {heroes, nextPage, page, beforePage, limit, total, count, offset, totalPages } = resp;
-        patchState ({heroes, nextPage, page, beforePage, limit, total, count, offset, totalPages }) ;       
+        patchState ({heroes, nextPage, page, beforePage, limit, total, count, offset, totalPages,nameStartsWith }) ;       
       })
     )
+  }
+  @Action(SetHeroeProfile)
+  setHeroeProfile({ patchState }: StateContext<HeroeStateModel>, { payload }: SetHeroeProfile) {
+    const heroe = payload.data 
+    patchState ({heroe, ...heroe}) ;       
   }
 
   @Action(PostTeamColorHero)
   postTeamColorHero({ patchState }: StateContext<HeroeStateModel>, { payload }: PostTeamColorHero) {
-    console.log("pay",payload); 
     return this.heroeService.postTeamColor({id_heroe: payload.id_heroe, color:payload.color}).pipe(
       tap((resp) => {
-        console.log("-----",resp);
-        const heroeTeamColor = resp;
-        console.log("postTeamColorHero", resp);
-         
+        const heroeTeamColor = resp;         
       })
     )
   }
 
   @Action(PutTeamColorHero)
   putTeamColorHero({ patchState }: StateContext<HeroeStateModel>, { payload }: PutTeamColorHero) {
-    console.log("pay",payload); 
     return this.heroeService.putTeamColor(payload.id_heroe, { color:payload.color}).pipe(
       tap((resp) => {
-        console.log("-----",resp);
-        const heroeTeamColor = resp;
-       console.log("putTeamColorHero", resp);
-         
+        const heroeTeamColor = resp;         
       })
     )
   }
+
 }
