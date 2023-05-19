@@ -15,17 +15,17 @@ import { HeroeState } from '../heroe/state/heroe.state';
 })
 export class ListadoDeHeroesComponent implements OnInit {
 
-  public title = 'Tutorial de Angular - Héroes de Marvel';
-  public searchString;
-  public heroes : Heroe[] ;
-  public page = 0;
-  public total = 0;
-  public offset = 10;
-  public beforePage = 0;
-  public limit= 10;
-  public count= 0;
-  public nextPageH = 0;
-  public totalPages = 0
+  title = 'Tutorial de Angular - Héroes de Marvel';
+  searchString;
+  heroes : Heroe[] ;
+  page = 0;
+  total = 0;
+  offset = 10;
+  beforePage = 0;
+  limit= 10;
+  count= 0;
+  nextPageH = 0;
+  totalPages = 0
 
    // Selector asociado a la propiedad people del estado
    @Select(HeroeState.heroe)
@@ -35,8 +35,7 @@ export class ListadoDeHeroesComponent implements OnInit {
   @ViewChild('spi') spinner;
   /* public heroes: Array<Heroe> = []; */
 
-  constructor(private heroesService: HeroesService, 
-              private router:Router,
+  constructor(private router:Router,
               private store: Store ) { }
   async ngOnInit() {
     

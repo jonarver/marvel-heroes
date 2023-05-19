@@ -6,6 +6,11 @@ import { HeroesService } from '../../heroes.service'
 import { tap } from 'rxjs/operators';
 import { state } from '@angular/animations';
 
+// Actions
+export class FeedAnimals {
+  static readonly type = '[Zoo] FeedAnimals';
+}
+
 export class HeroeStateModel {
   public nextPage:number;
   public page:number;
