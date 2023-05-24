@@ -3,7 +3,7 @@ export class Heroe {
         public id: string,
         public name: string,
         public description: string,
-        public modified: Date,
+        public modified: string,
         public thumbnail: Object,
         public resourceURI: string,
         public teamColor: string

@@ -5,7 +5,7 @@ import { listHeroes, Heroe } from '../heroe/state/heroe.model'
 import { HeroesService } from '../heroes.service';
 
 import { Location } from '@angular/common';
-import { PostTeamColorHero,PutTeamColorHero } from '../heroe/state/heroe.actions'
+import { PostTeamColorHero,PutTeamColorHero,GetHeroeProfile } from '../heroe/state/heroe.actions'
 import { HeroeState } from '../heroe/state/heroe.state';
 import { Observable } from 'rxjs';
 
@@ -40,11 +40,11 @@ export class HeroProfileComponent implements OnInit {
 
   async ngOnInit() {
     //this.heroe = JSON.parse(localStorage.getItem('heroe'))
-   
-    
+    this.store.dispatch(new GetHeroeProfile()).subscribe(data=>{
+      this.heroe=data
+    })
     await this.fetchHeroe()
-    this.assignedTeam = this.heroe.teamColor!=''?true:false
-    
+    this.assignedTeam = this.heroe.teamColor!=''?true:false    
   }
 
   goBack() {

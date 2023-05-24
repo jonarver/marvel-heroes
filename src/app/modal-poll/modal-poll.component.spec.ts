@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ModalPollComponent } from './modal-poll.component';
 
-xdescribe('ModalPollComponent', () => {
+describe('ModalPollComponent', () => {
   let component: ModalPollComponent;
   let fixture: ComponentFixture<ModalPollComponent>;
 

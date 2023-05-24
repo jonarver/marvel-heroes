@@ -6,7 +6,7 @@ export interface HeroesStateModel {
      id: string;
      name: string;
      description: string;
-     modified: Date;
+     modified: string;
      thumbnail: Object;
      resourceURI: string;
      teamColor: string;
@@ -27,7 +27,6 @@ export interface HeroesStateModel {
   }
 
   export interface HeroeTeamColor {
-   id: string;
    calor: string;
    
 }

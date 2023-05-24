@@ -8,6 +8,10 @@ export class SetHeroeProfile {
   static readonly type = '[Heroe] Set Heroe';
   constructor(public payload: { data: Heroe }) { }
 }
+export class GetHeroeProfile {
+  static readonly type = '[Heroe] Get Heroe';
+  constructor() { }
+}
 export class PostTeamColorHero {
   static readonly type = '[Heroe] Post Team Color Heroe';
   constructor(public payload: { id_heroe:string, color:string }) { }
